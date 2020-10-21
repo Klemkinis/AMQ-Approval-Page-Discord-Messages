@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ approval discord bot
-// @version      0.1
+// @version      0.2
 // @match        https://animemusicquiz.com/admin/approveVideos
 // @match        https://animemusicquiz.com/admin/approveVideos?skipMp3=true
 // @run-at: document-end
@@ -183,7 +183,7 @@ function getAPIKey() {
         return null
     }
 
-    var cookieValue = cookie.substring(cookieKey.length + 2)
+    var cookieValue = cookie.substring(cookieKey.length + 1)
     return cookieValue
 }
 
