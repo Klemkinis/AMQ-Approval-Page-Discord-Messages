@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ approval discord bot
-// @version      0.2
+// @version      0.3
 // @match        https://animemusicquiz.com/admin/approveVideos
 // @match        https://animemusicquiz.com/admin/approveVideos?skipMp3=true
 // @run-at: document-end
@@ -31,6 +31,7 @@ function setup() {
     }
 
     setupDiscordToggle()
+    setupReUploadToggle()
     setupApproveConfirmationAction()
     setupDeclineConfirmationAction()
 }
@@ -62,6 +63,14 @@ function setupDeclineConfirmationAction() {
 }
 
 function setupDiscordToggle() {
+    createToggle("discordToggle", "Post on Discord", true)
+}
+
+function setupReUploadToggle() {
+    createToggle("reUploadToggle", "Is Re-Upload?", false)
+}
+
+function createToggle(id, title, isChecked) {
     var toggleParent = getVideoPlayer().parentElement
     if (toggleParent.children.length <= 1) {
         toggleParent = toggleParent.parentElement
@@ -71,14 +80,14 @@ function setupDiscordToggle() {
     toggleContainer.style.textAlign = "center"
 
     var toggle = document.createElement("input")
-    toggle.id = "discordToggle"
+    toggle.id = id
     toggle.type = "checkbox"
     toggle.style.margin = "5px"
-    toggle.checked = true
+    toggle.checked = isChecked
 
     var label = document.createElement("label")
     label.style.color = "inherit"
-    label.innerHTML = "Post on Discord"
+    label.innerHTML = title
 
     toggleContainer.appendChild(toggle)
     toggleContainer.appendChild(label)
@@ -255,14 +264,27 @@ function getDiscordToggle() {
     return discordToggle
 }
 
+function getReUploadToggle() {
+    var reUploadToggle = document.getElementById("reUploadToggle")
+    if (reUploadToggle == null) {
+        throw "Re-Upload toggle is missing!"
+    }
+    return reUploadToggle
+}
+
 // Video resolution
 function rescaleTypeFromApprovalsPage() {
 
     let currentUploadResolution = getSongInfoTable().children[0].children[6].children[1].innerHTML
     var rescaleTableRows = getRescaleTable().children[0]
+    var isReUpload = getReUploadToggle().checked
 
     if (rescaleTableRows.childElementCount == 1) {
-        return "newUpload"
+        if (isReUpload) {
+            return "reUpload"
+        } else {
+           return "newUpload"
+        }
     }
 
     if (rescaleTableRows.childElementCount == 2) {
