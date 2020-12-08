@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ approval discord bot
-// @version      0.3
+// @version      0.3.1
 // @match        https://animemusicquiz.com/admin/approveVideos
 // @match        https://animemusicquiz.com/admin/approveVideos?skipMp3=true
 // @run-at: document-end
@@ -71,14 +71,7 @@ function setupReUploadToggle() {
 }
 
 function createToggle(id, title, isChecked) {
-    var toggleParent = getVideoPlayer().parentElement
-    if (toggleParent.children.length <= 1) {
-        toggleParent = toggleParent.parentElement
-    }
-
-    var toggleContainer = document.createElement("div")
-    toggleContainer.style.textAlign = "center"
-
+    var toggleContainer = getToggleContainer()
     var toggle = document.createElement("input")
     toggle.id = id
     toggle.type = "checkbox"
@@ -91,8 +84,25 @@ function createToggle(id, title, isChecked) {
 
     toggleContainer.appendChild(toggle)
     toggleContainer.appendChild(label)
+}
+
+function getToggleContainer() {
+    var toggleContainer = document.getElementById("toggleContainer")
+    if (toggleContainer != null) {
+        return toggleContainer
+    }
+
+    var toggleParent = getVideoPlayer().parentElement
+    if (toggleParent.children.length <= 1) {
+        toggleParent = toggleParent.parentElement
+    }
+
+    toggleContainer = document.createElement("div")
+    toggleContainer.id = "toggleContainer"
+    toggleContainer.style.textAlign = "center"
 
     toggleParent.appendChild(toggleContainer)
+    return toggleContainer
 }
 
 // Button actions
