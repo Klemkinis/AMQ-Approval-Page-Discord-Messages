@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ approval discord bot
-// @version      0.3.1
+// @version      0.3.2
 // @match        https://animemusicquiz.com/admin/approveVideos
 // @match        https://animemusicquiz.com/admin/approveVideos?skipMp3=true
 // @run-at: document-end
@@ -171,6 +171,7 @@ function sendApprovedSongRequest() {
     var songType = encodeURIComponent(songInfoTableBody.children[3].children[1].innerText)
     var songLink = encodeURIComponent(songInfoTableBody.children[4].children[1].innerText)
     var uploader = encodeURIComponent(songInfoTableBody.children[5].children[1].innerText)
+    var annId = encodeURIComponent(songInfoTableBody.children[0].children[1].children[0].href.split("php?id=")[1])
 
     var rescaleType = rescaleTypeFromApprovalsPage()
 
@@ -183,6 +184,7 @@ function sendApprovedSongRequest() {
         "?songLink=" + songLink +
         "?rescaleType=" + rescaleType +
         "?uploader=" + uploader +
+        "?annId=" + annId +
         "?apiKey=" + currentAPIKey
 
     var request = new XMLHttpRequest()
