@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ approval discord bot
-// @version      0.3.2
+// @version      0.3.3
 // @match        https://animemusicquiz.com/admin/approveVideos
 // @match        https://animemusicquiz.com/admin/approveVideos?skipMp3=true
 // @run-at: document-end
@@ -113,7 +113,6 @@ function confirmApproval() {
     }
 
     sendApprovedSongRequest()
-    approveSong()
 }
 
 function approveSong() {
@@ -126,8 +125,7 @@ function declineApproval() {
         return
     }
 
-    sendDeclinedSongRequest()
-    declineSong(reason)
+    sendDeclinedSongRequest(reason)
 }
 
 function declineSong(reason) {
@@ -135,7 +133,7 @@ function declineSong(reason) {
 }
 
 // Requests
-function sendDeclinedSongRequest() {
+function sendDeclinedSongRequest(reason) {
     if (getDiscordToggle().checked == false) {
         return
     }
@@ -152,6 +150,13 @@ function sendDeclinedSongRequest() {
 
     var request = new XMLHttpRequest()
     request.open("POST", requestURL, true)
+    request.onreadystatechange = function() {
+        if (this.readyState != 4 || this.status != 200) {
+            return
+        }
+        declineSong(reason)
+    }
+
     request.send()
 }
 
@@ -189,6 +194,13 @@ function sendApprovedSongRequest() {
 
     var request = new XMLHttpRequest()
     request.open("POST", requestURL, true)
+    request.onreadystatechange = function() {
+        if (this.readyState != 4 || this.status != 200) {
+            return
+        }
+        approveSong()
+    }
+
     request.send()
 }
 
