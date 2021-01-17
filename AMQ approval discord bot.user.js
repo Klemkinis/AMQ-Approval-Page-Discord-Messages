@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ approval discord bot
-// @version      0.3.3
+// @version      0.3.4
 // @match        https://animemusicquiz.com/admin/approveVideos
 // @match        https://animemusicquiz.com/admin/approveVideos?skipMp3=true
 // @run-at: document-end
@@ -135,11 +135,13 @@ function declineSong(reason) {
 // Requests
 function sendDeclinedSongRequest(reason) {
     if (getDiscordToggle().checked == false) {
+        declineSong(reason)
         return
     }
 
     var songLink = getSongLink()
     if (isVideoLinkFromCatbox(songLink) == false) {
+        declineSong(reason)
         return
     }
 
@@ -162,11 +164,13 @@ function sendDeclinedSongRequest(reason) {
 
 function sendApprovedSongRequest() {
     if (getDiscordToggle().checked == false) {
+        approveSong()
         return
     }
 
     var songInfoTableBody = getSongInfoTable().children[0]
     if (songInfoTableBody == null) {
+        approveSong()
         throw "Song info table is missing data!"
     }
 
